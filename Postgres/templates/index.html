@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+  
+  <h1> RELATÓRIOS MENSAIS. </h1>
+
+  {% for message in get_flashed_messages() %}
+  <h4>{{ message }}</h4>
+  {% endfor %}
+
+  
+  <h3> Ferramentas para Gerenciamento  de Investimentos.</h3>
+  <hr>
+  <div>                    
+    <ul>
+    <h3> Compra de Ativos.</h3>
+    <li><a href="{{url_for('compra')}}">Compra</a></li>
+    <h3> Venda de Ativos. </h3>
+    <li><a href="{{url_for('venda')}}">Venda</a></li>
+    <h3> Plano de Renda Mensal. (Retorno dos Investimentos)</h3>
+    <li><a href="{{url_for('proventos')}}">Proventos</a></li>
+    <h3> Guia de Acompanhamento Orçamentário.</h3>
+    <li><a href="{{url_for('orcamento')}}">Controle Orçamentário</a></li>
+    <h3> Ferramentas para Imposto de Renda.</h3>
+    <li><a href="{{url_for('fisco')}}">Imposto de Renda</a></li>
+    <h3> Memória de Login e Senhas. </h3>
+    <li><a href="{{url_for('agenda')}}">Controle de Identidades</a></li>
+   
+   </ul>
+    </div> 
+<hr>
+</body>
+</html>

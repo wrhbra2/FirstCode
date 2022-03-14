@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <ul>
+        <li><a href="{{url_for('index')}}">Home</a> </li>
+    </ul>
+  <h1> RELATÓRIOS MENSAIS. </h1>
+  <hr>
+  <h3> Venda  de  Ativos.</h3>
+
+  {% for message in get_flashed_messages() %}
+    <h4>{{ message }}</h4>
+    {% endfor %}
+    
+    <form method="post">
+        <div class="form-group">
+            <label for="title">Classe</label>
+            <input type="text" name="classe"
+             placeholder="Insira Classe" class="form-control"
+             value="{{ request.form['classe'] }}"></input>
+        </div>
+        
+        <div class="form-group">
+            <label for="title">Ativo</label>
+            <input type="text" name="ativo"
+             placeholder="Insira Ativo" class="form-control"
+             value="{{ request.form['ativo'] }}"></input>
+        </div>
+
+         <div class="form-group">
+            <label for="title">Quantidade</label>
+            <input type="text" name="quant"
+             placeholder="Insira Quantidade" class="form-control"
+             value="{{ request.form['quant'] }}"></input>
+        </div>
+
+        <div class="form-group">
+            <label for="title">Preço</label>
+            <input type="text" name="preco"
+             placeholder="Insira Valor" class="form-control"
+             value="{{ request.form['preco'] }}"></input>
+        </div>
+
+        <hr>
+       
+        <div class="form-group">
+            <button type=submit class="btn btn-primary" action="venda">Registrar Venda</button>
+        </div>
+
+
+</body>
+</html>

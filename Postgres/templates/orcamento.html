@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <ul>
+        <li><a href="{{url_for('index')}}">Home</a> </li>
+    </ul>
+  <h1> RELATÓRIOS MENSAIS. </h1>
+  <hr>
+  <h3> ORÇAMENTO - Guia de Acompanhamento Orçamentário...</h3>
+  {% for message in get_flashed_messages() %}
+    <h4>{{ message }}</h4>
+    {% endfor %}
+    
+    <form method="post">
+        <div class="form-group">
+            <label for="title">Descrição</label>
+            <input type="text" name="descricao"
+             placeholder="Insira descrição." class="form-control"
+             value="{{ request.form['descricao'] }}">
+        </div>
+
+         <div class="form-group">
+            <label for="title">Preço</label>
+            <input type="text" name="preco"
+             placeholder="Insira custo" class="form-control"
+             value="{{ request.form['preco'] }}">
+        </div>
+
+          <hr>
+       
+        <div class="form-group">
+            <button type=submit class="btn btn-primary" value="orcamento" action="orcamento">Registrar Agenda</button>
+        </div>
+
+
+</body>
+</html>

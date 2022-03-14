@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <ul>
+        <li><a href="{{url_for('index')}}">Home</a> </li>
+    </ul>
+  <h1> RELATÓRIOS MENSAIS. </h1>
+  
+    {% for message in get_flashed_messages() %}
+    <h4>{{ message }}</h4>
+    {% endfor %}
+    
+    <h1> ERRO INTERNO DO SERVIDOR.</h1>
+    <hr>
+    <h3>  Esta página é o resultado de algum valor digitado. Por favor redigite, sua solicitação.</h3>
+
+
+</body>
+</html>
