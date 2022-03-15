@@ -44,7 +44,7 @@ CREATE TABLE agenda( id SERIAL PRIMARY KEY,
                      ref timestamp default current_date,
                      organizacao varchar(100) not null,
                      identidade varchar(100) not null,
-                     senha varchar(100) not null,
+                     senha varchar,
                      observacoes varchar(1000)  );
 
 CREATE TRIGGER set_timestamp

@@ -6,11 +6,10 @@ import psycopg2
 
 def custodia():
     conn = rl.get_db_connection()
-    
-    c = rl.conn.execute('select * from compra;')
+        
     global cust
-    cust = c.fetchone()
-    print('resultado da função custodia',cust)
+    
+    cust = pd.read_sql_query('select * from compra;',conn).set_index('id')
     
     
     return render_template('compra.html',cust=cust)

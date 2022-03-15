@@ -1,17 +1,14 @@
-import re
-from flask import Flask, url_for, request, redirect, render_template, flash
+from flask import Flask, url_for, redirect, render_template, flash, request
 from matplotlib.backend_bases import RendererBase
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import psycopg2
 import pandas as pd
 import numpy as np
-import custodia as cs
-
+from modules import custodia as cs
 
 
 app = Flask(__name__)
-app.run(debug = True)
 app.config['SECRET_KEY'] = 'admin'
 
 def get_db_connection():
@@ -32,7 +29,7 @@ def index():
 
 @app.route('/orcamento', methods=['GET','POST'])
 def orcamento():
-    if request.method == 'POST':
+    if request.method('POST'):
         conn = get_db_connection()
         
         descricao = request.form['descricao']
@@ -80,13 +77,10 @@ def compra():
         cust = cs.cust
         flash('Carteira ATUALIZADA!')
         return render_template('compra.html',cust=cust)
-              
-        
-        
-
+    
 @app.route('/venda', methods=['GET','POST'])
 def venda():
-    if request.method == 'POST':
+    if request.method=='POST':
         conn = get_db_connection()
        
         classe = request.form['classe']
@@ -107,7 +101,7 @@ def venda():
 
 @app.route('/proventos',methods=['GET','POST'])
 def proventos():
-    if request.method == 'POST':
+    if request.method=='POST':
         conn = get_db_connection()
         
         classe = request.form['classe']
@@ -127,10 +121,21 @@ def proventos():
     return render_template('proventos.html')
     
 
+@app.route('/fisco')
+def fisco():
+    conn = get_db_connection()
+    
+    conf = pd.read_sql_query("select * from compra, venda",conn)
+         
+    return render_template('fisco.html',conf=conf)
+
+@app.route('/error')
+def error():
+    return render_template('error.html')
+
 @app.route('/agenda',methods=['GET','POST'])
 def agenda():
-    
-    if request.form == 'POST':
+    if request.form=='POST':
         conn = get_db_connection()
     
         org = request.form['organizacao']
@@ -138,7 +143,7 @@ def agenda():
         sen = request.form['senha']
         obs = request.form['observacoes']
         
-        pd.read_sql_table(f"insert into agenda (organizacao, identidade, senha, observacoes) values ('{org}','{ident}','{sen}', '{obs}');",conn)
+        conn.execute(f"insert into agenda (organizacao, identidade, senha, observacoes) values ({org},{ident},{sen}, {obs});")
         
         session.commit()
         
@@ -148,16 +153,3 @@ def agenda():
         
         return redirect(url_for('index'))
     return render_template('agenda.html')
-
-@app.route('/fisco')
-def fisco():
-    conn = get_db_connection()
-    
-    conf = pd.read_sql_query("select * from compra, venda",conn)
-    
-     
-    return render_template('fisco.html',conf=conf)
-
-@app.route('/error')
-def error():
-    return render_template('error.html')
