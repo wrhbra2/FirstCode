@@ -1,0 +1,186 @@
+
+QA Stack
+
+    Programação
+    Marcações
+
+    Account
+
+MySQL: Qual é a diferença entre float e double?
+110
+
+Verificando a nova estrutura do banco de dados, vi que alguém alterou um campo de float para double. Querendo saber por quê, verifiquei a documentação do mysql, mas honestamente não entendi qual é a diferença.
+
+Alguém pode explicar?
+mysql 
+— Janpio
+fonte
+2
+Observe que "Usar FLOAT pode causar alguns problemas inesperados porque todos os cálculos no MySQL são feitos com precisão dupla"
+— David Sykes
+1
+Acho que você quis dizer este link: dev.mysql.com/doc/refman/5.0/en/problems-with-float.html
+— arun
+Isso pode ser mais útil: stackoverflow.com/questions/5150274/…
+— Ifti Mahmud
+Também relevante: Ponto 5 em dev.mysql.com/doc/refman/5.0/en/no-matching-rows.html
+— rinogo
+
+Respostas:
+106
+
+Ambos representam números de ponto flutuante. A FLOATé para DOUBLEnúmeros de precisão simples, enquanto a é para números de precisão dupla.
+
+O MySQL usa quatro bytes para valores de precisão simples e oito bytes para valores de precisão dupla.
+
+Há uma grande diferença entre os números de ponto flutuante e os números decimais (numéricos), que você pode usar com o DECIMALtipo de dados. Isso é usado para armazenar valores de dados numéricos exatos, ao contrário de números de ponto flutuante, onde é importante preservar a precisão exata, por exemplo, com dados monetários.
+— Daniel Vassallo
+fonte
+27
+você pode elaborar com um exemplo
+— Kailas
+4
+Os flutuadores @Kailas são arredondados e os decimais não. O decimal (9,3) pode ser, por exemplo, 123456.789, ao passo que, se você tentar armazenar 123456.789, ele será inserido como 123456.0 como um ponto flutuante.
+— Blake
+76
+
+Talvez este exemplo possa explicar.
+
+CREATE TABLE `test`(`fla` FLOAT,`flb` FLOAT,`dba` DOUBLE(10,2),`dbb` DOUBLE(10,2)); 
+
+Temos uma mesa como esta:
+
++-------+-------------+
+| Field | Type        |
++-------+-------------+
+| fla   | float       |
+| flb   | float       |
+| dba   | double(10,2)|
+| dbb   | double(10,2)|
++-------+-------------+
+
+Para a primeira diferença, tentamos inserir um registro com '1,2' para cada campo:
+
+INSERT INTO `test` values (1.2,1.2,1.2,1.2);
+
+A tabela mostrando assim:
+
+SELECT * FROM `test`;
+
++------+------+------+------+
+| fla  | flb  | dba  | dbb  |
++------+------+------+------+
+|  1.2 |  1.2 | 1.20 | 1.20 |
++------+------+------+------+
+
+Veja a diferença?
+
+Tentamos o próximo exemplo:
+
+SELECT fla+flb, dba+dbb FROM `test`;
+
+Hola! Podemos encontrar a diferença assim:
+
++--------------------+---------+
+| fla+flb            | dba+dbb |
++--------------------+---------+
+| 2.4000000953674316 |    2.40 |
++--------------------+---------+
+
+— E é.
+fonte
+1
+Talvez uma comparação melhor fosse dar a fla e flb 2 casas decimais também. float(10, 2)
+— Grato
+30
+
+Os pares são como os flutuadores, exceto pelo fato de serem duas vezes maiores. Isso permite uma maior precisão.
+— Williham Totland
+fonte
+Observe que flutua e dobra após algum ponto. Por exemplo, 100000.1 trunca para 100000 como um float.
+— Blake
+14
+
+Pensei em adicionar o meu próprio exemplo que me ajudou a ver a diferença com o valor 1.3ao adicionar ou multiplicar com outro float, decimale double.
+
+1.3float ADICIONADO a 1.3de diferentes tipos:
+
+|float              | double | decimal |
++-------------------+------------+-----+
+|2.5999999046325684 | 2.6    | 2.60000 |
+
+1.3float MULTIPLICADO por 1.3de diferentes tipos:
+
+| float              | double             | decimal      |
++--------------------+--------------------+--------------+
+| 1.6899998760223411 | 1.6900000000000002 | 1.6900000000 |
+
+Isso está usando MySQL 6.7
+
+Inquerir:
+
+SELECT 
+    float_1 + float_2 as 'float add',
+    double_1 + double_2 as 'double add',
+    decimal_1 + decimal_2 as 'decimal add',
+
+    float_1 * float_2 as 'float multiply',
+    double_1 * double_2 as 'double multiply',
+    decimal_1 * decimal_2 as 'decimal multiply'
+FROM numerics
+
+Criar tabela e inserir dados:
+
+CREATE TABLE `numerics` (
+  `float_1` float DEFAULT NULL,
+  `float_2` float DEFAULT NULL,
+  `double_1` double DEFAULT NULL,
+  `double_2` double DEFAULT NULL,
+  `decimal_1` decimal(10,5) DEFAULT NULL,
+  `decimal_2` decimal(10,5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `_numerics` 
+    (
+        `float_1`,
+        `float_2`,
+        `double_1`,
+        `double_2`,
+        `decimal_1`,
+        `decimal_2`
+    )
+VALUES
+    (
+        1.3,
+        1.3,
+        1.3,
+        1.3,
+        1.30000,
+        1.30000
+    );
+
+— Omar
+fonte
+11
+
+FLOAT armazena números de ponto flutuante com precisão de até oito casas e tem quatro bytes, enquanto DOUBLE armazena números de ponto flutuante com precisão de até 18 casas e tem oito bytes.
+— user3902486
+fonte
+11
+
+Float tem 32 bits (4 bytes) com precisão de 8 casas. Double tem 64 bits (8 bytes) com precisão de 16 casas.
+
+Se precisar de mais precisão, use Double em vez de Float .
+— Ravi Patel
+fonte
+Perguntas semelhantes:
+
+    Como posso impedir a injeção de SQL em PHP?  2773
+    Devo usar o tipo de dados datetime ou timestamp no MySQL?  2686
+    Por que não devo usar funções mysql_ * no PHP?  2502
+    Como importo um arquivo SQL usando a linha de comando no MySQL?  2036
+    Como obter uma lista de contas de usuário usando a linha de comando no MySQL?  1348
+
+Ao utilizar nosso site, você reconhece que leu e compreendeu nossa Política de Cookies e nossa Política de Privacidade.
+Licensed under cc by-sa 3.0 with attribution required.
+

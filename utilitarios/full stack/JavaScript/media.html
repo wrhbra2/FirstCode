@@ -1,0 +1,47 @@
+<!DOCTYPE html> 
+ var nota01 = document.getElementById('nota01');
+var nota02 = document.getElementById('nota02');
+var nota03 = document.getElementById('nota03');
+var nota04 = document.getElementById('nota04');
+var enviar = document.getElementById('enviar');
+var txtMedia = document.getElementById('txtMedia');
+
+enviar.addEventListener("click", function (event) {
+  var valor01 = nota01.valueAsNumber || 0;
+  var valor02 = nota02.valueAsNumber || 0;
+  var valor03 = nota03.valueAsNumber || 0;
+  var valor04 = nota04.valueAsNumber || 0;
+
+  txtMedia.value = (valor01 + valor02 + valor03 + valor04)/4;
+});
+
+<div class="">
+  <p>Media dos alunos</p>
+  <form class="" method="post">
+    <p>
+      <label>Aluno 01
+        <input type="number" id="nota01" value="" max="10">
+      </label>
+    </p>
+    <p>
+      <label>Aluno 02
+        <input type="number" id="nota02" value="" max="10">
+      </label>
+    </p>
+    <p>
+      <label>Aluno 03
+        <input type="number" id="nota03" value="" max="10">
+      </label>
+    </p>
+    <p>
+      <label>Aluno 04
+        <input type="number" id="nota04" value="" max="10">
+      </label>
+    </p>
+    <p>
+      <input type="button" id="enviar" value="Enviar">
+      <input type="text" id="txtMedia" value="" readonly>
+    </p>
+  </form>
+</div>
+<html>

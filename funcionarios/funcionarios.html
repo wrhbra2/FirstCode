@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+
+	<title> E.E. Americo Franco </title>
+	
+	<link rel="stylesheet" type="text/css" href="default.css">
+	
+	
+   
+</head>
+
+
+<img src="escola.jpeg"></img>
+
+
+
+<h2> Cadastro de Servidores. </h2>
+
+
+	<button><a href="#cadastro">Cadastro</a></button>
+	<button><a href="#busca">Busca</a></button>
+	<button><a href="#default">Tabela</a></button>
+	  
+ <div class="items">
+	<p action="cadastro" id="cadastro" method="post">
+	<input type="text" id="form_nome"  placeholder="Nome" />
+
+	<input type="text" id="form_cargo"  placeholder="Cargo" />
+
+	<input type="tel" id="form_celular"  placeholder="Celular" />
+
+	<input type="text" id="form_email" placeholder="Email" />
+
+	<br>
+	<input type="submit" id="btnNovo" value="Novo" />
+	<input type="submit" id="btnCancelar" value="Cancelar" />
+	<input type="submit" id="btnResetar" value="Resetar" />
+	
+    
+
+	<p action="busca" id="busca" method="post">
+	<input type="text" id="buscaid" placeholder="Procurar" />
+	<input type="submit" id="btnBusca" value="Busca" />
+	
+	
+		
+	<p id="default"><!-- by default, show no text -->
+	
+	<hr>
+
+<!--saida html-->
+<table id="tabela">
+	<thead>
+		<tr>
+			<th>id</th>
+			<th>Nome</th>
+			<th>Cargo</th>
+			<th>Celular</th>
+			<th>email</th>
+		</thead>
+	<tbody id="linha">
+		</tbody>
+</table>
+	
+
+<script  type="module"   src="form.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+﻿09/02/2022
+Projeto: Marilia Peixes&Cia. Web Store.
+
+Estrutura:
+
+1. Pagina Home.
+	Tabela produto – produto, descriação e status (tem/ não tem em estoque) com foto.
+
+2. Pagina Pedidos.
+	Tabela cadstro de clientes.
+	Tabela compra.
+
+3. Pagina Pagamentos.
+	Mecanismos de pagamentos – possível auxilio de banco de dados.
+	Tabela com inserção de dados:
+		PIX
+		Deposito bancario com envio de comprovante.
+
+4. Pagina Logistica.
+	Rastreio do pedido em Mapa.
+	Tabela descrição de previsão chegada de produto.
+	
+	

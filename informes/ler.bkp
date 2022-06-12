@@ -1,0 +1,104 @@
+#Estrurura do Projeto:
+# 
+#Processo minimo do software.
+
+
+# Ler Arquivo
+#    Contar e dividir as  operações por mês
+#        soma operações mensais em compra e venda
+#              
+#VENDA AÇOES
+#  Vendas maior r$20000
+#        Diferença de datas de venda
+#                mesma data
+#                    darf = total por ativo *0,20
+#               mais que 1 dia
+#                    darf = total ativo *0,15
+#        darf desconta prejuizo a descontar
+#        resultado = prejuizo a descontar > +1
+#        darf devido resultado
+
+
+
+
+import pandas as pd
+import numpy as np
+from datetime import datetime as dt
+
+
+
+
+#Ler arquivo.
+file_name = "mov.xlsx" 
+df = pd.read_excel(file_name).sort_values('Data')
+
+#Formtar datas
+
+df['Data'] = pd.to_datetime(df['Data'],format='%d/%m/%Y')
+df['dia']= df['Data'].dt.strftime('%-d')
+#df['mês'] = df['Data'].dt.strftime('%-m %B')
+df['mês'] = df['Data'].dt.strftime('%B')
+ano = df['Data'].dt.strftime('%Y')
+#Prejuio compensar ações
+pca = 28418.69
+print('Seu Prejuizo a Compensar AÇÕES é de R$: ' +'(padrão:',f'{pca}')
+
+#Prejuio a compensar fii
+pcf = 635.88
+print('Seu Prejuizo a Compensar FII é de R$:' +'(padrão:',f' {pcf}')
+
+#df2 = df.groupby(by=['mês','Produto','Movimentação','Valor da Operação'])
+
+#Classificar Movimentações
+mov = df['Movimentação'].unique()
+for mov in mov:
+    cond = df['Movimentação'] == mov
+    mv = df[cond].sort_values(by='Data',ascending=True)
+    
+
+     #Classificar Por mês.
+     mensal = mv['mês'].unique()
+     for mensal in mensal:
+         param = mv['mês'] == mensal
+         ms = mv[param].set_index('mês')
+
+         #Classifcar por produto.
+         prod = ms['Produto'].unique()
+         for prod in prod:
+             fil = ms['Produto'] == prod
+             prd = ms[fil].sort_values(by='Data',ascending=True)
+
+             
+    #Calcular Vendas.
+    if mov == 'Transferência - Liquidação':
+        #...Continuação da condicional if.PARAMETRO 1
+        prod'Total'] = prod['Valor da Operação'].sum()
+        soma = prod['Total'].unique()
+        if soma == '20000':
+            prod['darf'] = ((soma * 0.15) - pca)
+            
+            else:
+                prod['darf'] = 'isento'
+                print(prod)
+                
+
+        
+    #Saida html.
+    file = open(f"{mov}" +'.html','w')
+    html = mv.to_html()
+    file.write(html)
+    file.close()
+    
+
+
+
+
+    
+
+
+
+    
+
+
+
+

@@ -1,0 +1,2 @@
+Para conectar ao banco de dados:
+comando: mysql -u root -p <senha>

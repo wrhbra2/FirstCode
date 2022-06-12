@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<html lang=en>
+    <head>
+        <link rel="stylesheet" href="static/css/style.css">
+       
+    </head>
+    <body>
+        <div>
+            <ul>
+                <li><a href="{{url_for('index')}}">Home</a></li>
+            </ul>
+        <h1> Agenda de Horários</h1>
+
+  {% for message in get_flashed_messages() %}
+     <h2>{{ message }}</h2>
+     {% endfor %}
+
+     <div>
+        <img src="static/css/image/hora.png" alt="hora"/>
+          </div>
+            
+       <div>
+        <form  methods="POST">
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" value="{{request.form['nome']}}" />
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" value="{{request.form['email']}}" />
+            </div>
+            <div>
+                <label for="telefone">Telefone:</label>
+                <input type="tel" value="{{request.form['telefone']}}" placeholder="(xx)xxxxx-xxxx"> 
+                <div>
+                    <div>
+                        <label for="dia">Melhor Dia:</label>
+                        <input type="date" value="{{request.form['dia']}}" />
+                    </div>
+                    <div>
+                        <label for="hora">Melhor Hora:</label>
+                        <input type="time" value="{{request.form['hora']}}" />
+                    </div>      
+
+                    <label for="msg"> Tipo de Atendimento:</label>
+                    <textarea>{{request.form['msg']}}</textarea>
+                </div>
+                <div  >
+                    <button type=submit class=btn action="agenda">Agendar</button>
+            </div>
+
+       
+        </body>
+        <div>
+            <footer>
+                <p> <a href="https://www.instagram.com/crebortoli/?hl=pt">instagram</a></p>
+            </footer>
+        </div>
+        </html>

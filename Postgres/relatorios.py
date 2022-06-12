@@ -6,6 +6,8 @@ import psycopg2
 import pandas as pd
 import numpy as np
 from modules import custodia as cs
+from modules import darf as df
+from modules import rentabilidade as rt
 
 
 app = Flask(__name__)
@@ -15,6 +17,7 @@ def get_db_connection():
     # Criando conexão no banco.
     global conn
     
+    #sintaxe "postgresql://user:senha@host:porta/database_base"
     conn = create_engine("postgresql://root:postgres@localhost:5432/postgres")
     
     global session
@@ -29,13 +32,13 @@ def index():
 
 @app.route('/orcamento', methods=['GET','POST'])
 def orcamento():
-    if request.method('POST'):
+    if request.method =='POST':
         conn = get_db_connection()
         
         descricao = request.form['descricao']
         preco = request.form['preco']
         
-        conn.execute(f"insert into orcamento (descricao, preco) values ('{descricao}', '{preco}');")
+        conn.execute(f"insert into relatorios.orcamento (descricao, preco) values ('{descricao}', '{preco}');")
         
         session.commit()
         
@@ -57,9 +60,10 @@ def compra():
             preco = request.form['preco']
             
             if (classe,ativo,quant,preco) is None:
-                flash 
+                return render_template('error.html')
+                
 
-            conn.execute(f"insert into compra (classe, ativo, quant, preco) values ('{classe}', '{ativo}','{quant}','{preco}');")
+            conn.execute("insert into relatorios.compra (classe, ativo, quant, preco) values ('{classe}', '{ativo}','{quant}','{preco}' );")
 
             session.commit()
 
@@ -69,35 +73,51 @@ def compra():
 
             return redirect(url_for('index'))
         return render_template('compra.html')
-           
+      
+        
+                 
     except Exception:
         return render_template('error.html')
     finally:
-        cs.custodia()
-        cust = cs.cust
-        flash('Carteira ATUALIZADA!')
-        return render_template('compra.html',cust=cust)
+         cs.custodia()
+         cust = cs.cust
+         flash('Carteira ATUALIZADA!')
+         return render_template('compra.html',cust=cust)
+    
+         
     
 @app.route('/venda', methods=['GET','POST'])
 def venda():
-    if request.method=='POST':
-        conn = get_db_connection()
+    try:
+        if request.method=='POST':
+            conn = get_db_connection()
+        
+            classe = request.form['classe']
+            ativo = request.form['ativo']
+            quant = request.form['quant']
+            preco = request.form['preco']
+
+            conn.execute(f"insert into relatorios.venda (classe, ativo, quant, preco) values ('{classe}','{ativo}','{quant}','{preco}');")
+
+            session.commit()
+
+            session.close()
+
+            flash('Venda Realizada.')
+
+            return redirect(url_for('index'))
+        return render_template('venda.html')
+  
+    except Exception:
+        return render_template('error.html')
+   
+    finally:
+         df.darf()
+         darf = df.darf
+         flash('Imposto CALCULADO!')
+         return render_template('venda.html',darf=darf)
        
-        classe = request.form['classe']
-        ativo = request.form['ativo']
-        quant = request.form['quant']
-        preco = request.form['preco']
-
-        conn.execute(f"insert into venda (classe, ativo, quant, preco) values ('{classe}','{ativo}','{quant}','{preco}');")
-
-        session.commit()
-
-        session.close()
-
-        flash('Venda Realizada.')
-
-        return redirect(url_for('index'))
-    return render_template('venda.html')
+    
 
 @app.route('/proventos',methods=['GET','POST'])
 def proventos():
@@ -109,7 +129,7 @@ def proventos():
         quant = request.form['quant']
         valor = request.form['valor']
 
-        conn.execute(f"insert into proventos (classe, ativo, quant, valor) values ('{classe}','{ativo}','{quant}','{valor}');")
+        conn.execute(f"insert into relatorios.proventos (classe, ativo, quant, valor) values ('{classe}','{ativo}','{quant}','{valor}');")
 
         session.commit()
 
@@ -125,7 +145,7 @@ def proventos():
 def fisco():
     conn = get_db_connection()
     
-    conf = pd.read_sql_query("select * from compra, venda",conn)
+    conf = pd.read_sql_query("select * from relatorios.compra, relatrios.venda",conn)
          
     return render_template('fisco.html',conf=conf)
 
@@ -135,15 +155,17 @@ def error():
 
 @app.route('/agenda',methods=['GET','POST'])
 def agenda():
-    if request.form=='POST':
+    if request.form == 'POST':
         conn = get_db_connection()
     
-        org = request.form['organizacao']
-        ident = request.form['identidade']
-        sen = request.form['senha']
-        obs = request.form['observacoes']
+        org = request.form.get['organizacao']
+        ident = request.form.get['identidade']
+        sen = request.form.get['senha']
+        obs = request.form.get['observacoes']
         
-        conn.execute(f"insert into agenda (organizacao, identidade, senha, observacoes) values ({org},{ident},{sen}, {obs});")
+        print(org,ident,sen,obs)
+        
+        conn.execute(f"insert into relatorios.agenda (organizacao, identidade, senha, observacoes) values ('{org}','{ident}','{sen}', '{obs}');")
         
         session.commit()
         

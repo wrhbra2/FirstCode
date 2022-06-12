@@ -1,0 +1,17 @@
+#Startar o Servidor XAMPP
+sudo /opt/lamp/manager-linux-x64.run
+
+#Mudar dominio no servidor XAMPP
+sudo vim /opt/lampp/etc/extra/httpd-vhosts.conf
+
+#Mudar dominio na máquina
+sudo vim /etc/hosts
+
+#Mudar conteudo do localhost.
+#Selecionar pasta com arquivo.html.
+#Modificar o conteúdo de:
+/opt/lampp/etc/httpd-vhosts.conf
+
+Seção <VirtualHost name:80>
+Linha DocumentRoot "arquivo.html"
+Linha <Directory "arquivo.html">
