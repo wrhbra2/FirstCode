@@ -1,0 +1,6 @@
+$git init
+$git add .
+$git commit -m "comentários"
+$git push origin main
+
+password: w@nd3r2022
